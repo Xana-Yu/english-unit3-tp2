@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Edukasi Interaktif 20 Soal | English Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{
+ --ink:#202447;--muted:#737998;--primary:#6558f5;--primary2:#8c65ff;
+ --pink:#ff6f9f;--yellow:#ffd166;--mint:#65d9bd;--blue:#6bc8ff;
+ --paper:#ffffff;--bg:#f5f6ff;--line:#e9eafa;--good:#159b70;--bad:#e34c71;
+ --shadow:0 18px 50px rgba(59,55,125,.12);--radius:24px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Nunito',sans-serif;color:var(--ink);background:radial-gradient(circle at 5% 0%,#eee9ff 0,transparent 28%),radial-gradient(circle at 100% 20%,#e0f8ff 0,transparent 25%),var(--bg);min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0;transition:transform .18s,box-shadow .18s,background .18s}
+button:hover{transform:translateY(-2px)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #b6aaff;outline-offset:3px}
+
+.topbar{background:rgba(255,255,255,.82);backdrop-filter:blur(14px);border-bottom:1px solid #e9eafa;position:sticky;top:0;z-index:10}
+.top-inner{max-width:1180px;margin:auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:16px;color:#fff;font-size:22px;background:linear-gradient(135deg,var(--primary),var(--pink));box-shadow:0 8px 18px #6558f540;flex-shrink:0}
+.brand h1{font:800 18px 'Poppins',sans-serif;margin:0;letter-spacing:-.4px}
+.brand p{margin:2px 0 0;color:var(--muted);font-size:12px}
+.nav{display:flex;gap:8px;flex-shrink:0}
+.nav-btn{padding:11px 16px;border-radius:14px;background:transparent;color:var(--muted);font-weight:800}
+.nav-btn.active{background:#eeecff;color:var(--primary)}
+
+main{max-width:1180px;margin:28px auto;padding:0 22px 48px}
+.hero{position:relative;overflow:hidden;border-radius:30px;padding:30px 34px;background:linear-gradient(120deg,#6558f5,#8964fa 55%,#b46cff);color:#fff;box-shadow:var(--shadow);display:grid;grid-template-columns:1.5fr .7fr;gap:20px;align-items:center}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;background:#ffffff12}
+.hero:before{width:250px;height:250px;right:15%;top:-150px}.hero:after{width:170px;height:170px;right:-40px;bottom:-90px}
+.eyebrow{font-weight:900;letter-spacing:1.7px;font-size:11px;text-transform:uppercase;opacity:.8}
+.hero h2{font:800 clamp(25px,3vw,38px) 'Poppins',sans-serif;line-height:1.2;margin:9px 0 12px;max-width:620px}
+.hero p{margin:0;max-width:650px;line-height:1.65;color:#f4efff}
+.meta-row{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}
+.meta-chip{font-size:12px;font-weight:800;padding:8px 11px;border-radius:99px;background:#ffffff20;border:1px solid #ffffff26}
+.hero-art{position:relative;z-index:1;justify-self:center;font-size:100px;filter:drop-shadow(0 14px 14px #30205b35);animation:float 3.2s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-9px) rotate(3deg)}}
+
+.panel{background:var(--paper);border:1px solid #ececff;border-radius:var(--radius);box-shadow:var(--shadow)}
+.content-grid{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:22px;margin-top:22px}
+.game-panel{padding:26px;min-width:0}
+.side-panel{padding:23px;align-self:start}
+.panel-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
+.panel-heading h3{font:800 19px 'Poppins',sans-serif;margin:0}
+.small-label{font-size:12px;color:var(--muted);font-weight:800}
+.progress-wrap{height:9px;background:#f0effc;border-radius:99px;overflow:hidden;margin:12px 0 22px}
+.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--pink));border-radius:99px;transition:width .35s}
+.question-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}
+.q-number{font-size:12px;font-weight:900;color:var(--primary);background:#f0edff;padding:8px 12px;border-radius:99px}
+.q-type{font-size:12px;font-weight:800;color:#777c9b}
+.question{font:800 clamp(19px,2.2vw,25px) 'Poppins',sans-serif;line-height:1.45;margin:0 0 20px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.option{padding:15px 16px;text-align:left;background:#fbfbff;border:2px solid var(--line);border-radius:16px;color:var(--ink);font-weight:800;min-height:60px;display:flex;gap:12px;align-items:center;transition:all .2s ease}
+.option .letter{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:#eeedff;color:var(--primary);flex-shrink:0;font-size:13px}
+.option:hover:not(:disabled){border-color:#b8adff;background:#f8f6ff}
+.option.selected{border-color:var(--primary);background:#f1efff}
+.option.correct{border-color:var(--mint);background:#edfff9;color:var(--good)}
+.option.incorrect{border-color:#ff9ab4;background:#fff1f5;color:var(--bad)}
+.option:disabled{cursor:default}
+
+.build-area{min-height:76px;padding:12px;display:flex;flex-wrap:wrap;gap:9px;align-content:flex-start;background:#f8f8ff;border:2px dashed #d9d6f6;border-radius:17px;margin-bottom:16px}
+.build-placeholder{color:#999db6;font-size:14px;padding:13px 5px}
+.word-bank{display:flex;flex-wrap:wrap;gap:9px;margin:13px 0 20px}
+.word-tile{padding:10px 14px;border-radius:12px;background:#fff;border:2px solid #e4e2fb;color:var(--ink);font-weight:900;box-shadow:0 4px 0 #e9e6ff;transition:all .15s ease}
+.word-tile:hover:not(:disabled){border-color:var(--primary);background:#f5f2ff}
+.word-tile.used{opacity:.35;box-shadow:none;cursor:not-allowed;transform:none}
+.build-area .word-tile{background:#e9fff7;border-color:#b8f0df;box-shadow:0 3px 0 #ccefe4}
+.hint{background:#fff9e9;border:1px solid #ffebaf;border-radius:14px;padding:12px 14px;font-size:13px;color:#75602a;line-height:1.5}
+
+.game-controls{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}
+.control-group{display:flex;gap:9px;flex-wrap:wrap}
+.btn{padding:12px 17px;border-radius:13px;font-weight:900;display:inline-flex;align-items:center;gap:8px;justify-content:center}
+.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary2));color:white;box-shadow:0 7px 16px #6558f52b}
+.btn-light{background:#f2f2fb;color:#686b8d}
+.btn-pink{background:#fff0f5;color:#d84673}
+.btn-green{background:#e8fff7;color:#148765}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.stat{padding:15px;border-radius:16px;background:#f8f7ff}
+.stat strong{display:block;font:800 24px 'Poppins',sans-serif}
+.stat span{color:var(--muted);font-size:11px;font-weight:800}
+.side-title{font:800 16px 'Poppins',sans-serif;margin:0 0 6px}
+.side-copy{color:var(--muted);font-size:13px;line-height:1.6;margin:0}
+.rules{display:grid;gap:13px;margin-top:19px}
+.rule{display:flex;gap:10px;align-items:flex-start;font-size:13px;line-height:1.45}
+.rule i{color:var(--primary);margin-top:3px;width:17px}
+.profile{font-size:12px;color:var(--muted);line-height:1.8;margin-top:22px;padding-top:17px;border-top:1px solid var(--line)}
+
+.hidden{display:none!important}
+.view{animation:appear .3s ease}
+@keyframes appear{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+
+.form-card{max-width:650px;margin:30px auto;padding:30px}
+.form-card h2{font:800 25px 'Poppins',sans-serif;margin:0 0 8px}
+.form-card>p{color:var(--muted);line-height:1.6;margin:0 0 23px}
+.field{display:grid;gap:8px;margin:16px 0}
+.field label{font-size:13px;font-weight:900}
+.field input,.field select{width:100%;border:2px solid var(--line);border-radius:13px;padding:13px 14px;background:#fcfcff;color:var(--ink)}
+.field input:focus,.field select:focus{border-color:var(--primary);outline:none}
+.form-error{color:var(--bad);font-size:13px;font-weight:800;margin-top:10px}
+
+.table-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:620px}
+th,td{text-align:left;padding:15px 14px;border-bottom:1px solid var(--line);font-size:13px}
+th{font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);background:#fafaff}
+td{font-weight:700}
+.score-pill{display:inline-block;padding:6px 10px;border-radius:99px;background:#e9fff7;color:#138561;font-weight:900}
+.empty{text-align:center;padding:45px 15px;color:var(--muted)}
+.empty i{font-size:34px;color:#c9c7e9;margin-bottom:12px}
+.recap-head{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;margin-bottom:18px}
+.recap-head h2{font:800 24px 'Poppins',sans-serif;margin:0}
+
+.modal-backdrop{position:fixed;inset:0;background:#171638a8;display:grid;place-items:center;padding:20px;z-index:30;backdrop-filter:blur(5px)}
+.modal{background:white;border-radius:26px;padding:30px;max-width:440px;width:100%;text-align:center;box-shadow:0 25px 80px #17163855;animation:pop .25s ease}
+@keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.modal-emoji{font-size:68px;display:block;margin-bottom:10px;animation:bounce .6s ease}
+@keyframes bounce{50%{transform:scale(1.18) rotate(-5deg)}}
+.modal h3{font:800 23px 'Poppins',sans-serif;margin:0 0 8px}
+.modal p{color:var(--muted);line-height:1.6;margin:0 0 20px}
+.modal .field{text-align:left}
+.toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#252547;color:white;padding:13px 18px;border-radius:14px;z-index:50;box-shadow:var(--shadow);font-weight:800;font-size:13px;transition:.25s;max-width:calc(100% - 30px);text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.result-score{font:900 48px 'Poppins',sans-serif;color:var(--primary);margin:6px 0}
+footer{text-align:center;color:#8b8da8;font-size:12px;padding:0 20px 25px}
+
+@media(max-width:850px){.content-grid{grid-template-columns:1fr}.side-panel{order:2}.hero{grid-template-columns:1fr .3fr;padding:25px}.hero-art{font-size:75px}.side-panel{display:grid;grid-template-columns:1fr 1fr;gap:14px}.side-panel .profile{grid-column:1/-1;margin-top:0}}
+@media(max-width:600px){.top-inner{padding:12px 14px;align-items:flex-start;flex-direction:column}.nav{width:100%}.nav-btn{flex:1;padding:10px 8px;font-size:12px}.brand h1{font-size:16px}main{padding:0 13px 35px;margin-top:15px}.hero{grid-template-columns:1fr;padding:23px;border-radius:23px}.hero-art{display:none}.hero h2{font-size:27px}.game-panel{padding:18px}.options{grid-template-columns:1fr}.option{min-height:53px}.game-controls{align-items:stretch;flex-direction:column}.control-group{display:grid;grid-template-columns:1fr 1fr}.game-controls>.control-group:last-child{grid-template-columns:1fr 1fr}.btn{padding:12px 11px;font-size:13px}.side-panel{display:block}.side-panel .rules{margin-bottom:18px}.form-card{padding:22px;margin:18px auto}.panel-heading h3{font-size:17px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+ <div class="top-inner">
+  <div class="brand"><div class="brand-icon"><i class="fa-solid fa-graduation-cap"></i></div><div><h1>English Quest</h1><p>Game Edukasi Interaktif · SMPIT AL ITTIHAD</p></div></div>
+  <nav class="nav" aria-label="Navigasi utama">
+   <button class="nav-btn active" id="navGame" onclick="showView('game')">🎮 Game Interaktif</button>
+   <button class="nav-btn" id="navRecap" onclick="showView('recap')">📊 Rekap Nilai</button>
+  </nav>
+ </div>
+</header>
+<main>
+ <section class="hero">
+  <div><div class="eyebrow">LEARN · PLAY · LEVEL UP</div><h2>Ready to level up your English?</h2><p>Asah kemampuanmu dalam <b>Simple Present Tense</b>, <b>telling the time</b>, dan <b>frequency expressions</b> melalui 20 tantangan seru!</p><div class="meta-row"><span class="meta-chip"><i class="fa-solid fa-list-check"></i> 20 Soal</span><span class="meta-chip"><i class="fa-solid fa-star"></i> Skor Maks. 100</span><span class="meta-chip"><i class="fa-solid fa-shuffle"></i> Soal Diacak</span></div></div>
+  <div class="hero-art" aria-hidden="true">🦉</div>
+ </section>
+
+ <section id="gameView" class="view">
+  <div id="identityScreen" class="panel form-card">
+   <h2>Let's get started! 🚀</h2><p>Isi identitasmu terlebih dahulu sebelum masuk ke tantangan English Quest.</p>
+   <form id="identityForm">
+    <div class="field"><label for="studentName">Nama Lengkap</label><input id="studentName" name="studentName" placeholder="Masukkan nama lengkap" maxlength="80" required autocomplete="name"></div>
+    <div class="field"><label for="studentClass">Kelas / Kelompok</label><input id="studentClass" name="studentClass" placeholder="Contoh: 7A / Kelompok 2" maxlength="40" required></div>
+    <button class="btn btn-primary" type="submit" style="width:100%">Mulai Tantangan <i class="fa-solid fa-arrow-right"></i></button>
+   </form>
+   <div class="hint" style="margin-top:18px"><i class="fa-solid fa-lightbulb"></i> Setiap mulai atau mengulang, urutan soal dan pilihan jawaban akan diacak kembali.</div>
+  </div>
+
+  <div id="quizScreen" class="content-grid hidden">
+   <section class="panel game-panel">
+    <div class="panel-heading"><h3>🎯 Your Challenge</h3><span class="small-label" id="answeredLabel">0 / 20 dijawab</span></div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div id="questionContainer"></div>
+    <div class="game-controls">
+     <div class="control-group"><button class="btn btn-light" id="prevBtn" onclick="moveQuestion(-1)"><i class="fa-solid fa-arrow-left"></i> Kembali</button><button class="btn btn-light" onclick="resetQuiz()"><i class="fa-solid fa-rotate"></i> Ulangi</button></div>
+     <div class="control-group"><button class="btn btn-primary" id="checkBtn" onclick="checkAnswer()"><i class="fa-solid fa-paper-plane"></i> Jawab & Periksa</button><button class="btn btn-primary" id="nextBtn" onclick="moveQuestion(1)">Lanjut <i class="fa-solid fa-arrow-right"></i></button></div>
+    </div>
+   </section>
+   
+   <aside class="panel side-panel">
+    <div><h3 class="side-title">Your Progress ✨</h3><p class="side-copy">Setiap soal memberikan gambaran kemampuanmu. Tetap semangat!</p></div>
+    <div class="stats"><div class="stat"><strong id="scoreStat">0</strong><span>SKOR SEMENTARA</span></div><div class="stat"><strong id="doneStat">0/20</strong><span>DIJAWAB</span></div></div>
+    <div><h3 class="side-title">Cara Bermain</h3><div class="rules"><div class="rule"><i class="fa-solid fa-circle-check"></i><span>Terdapat 10 soal pilihan ganda dan 10 soal susun kalimat.</span></div><div class="rule"><i class="fa-solid fa-hand-pointer"></i><span>Untuk susun kalimat, klik kata sesuai urutan yang benar.</span></div><div class="rule"><i class="fa-solid fa-award"></i><span>Setiap jawaban benar bernilai 5 poin. Skor maksimal 100.</span></div><div class="rule"><i class="fa-solid fa-forward"></i><span>Jika jawaban kurang tepat, penjelasan akan muncul dan permainan otomatis berlanjut ke soal berikutnya.</span></div></div></div>
+    <div class="profile"><b>Penulis:</b> Nada Nisrina<br><b>Sekolah:</b> SMPIT AL ITTIHAD<br><b>Mata Pelajaran:</b> English</div>
+   </aside>
+  </div>
+
+  <div id="finishScreen" class="panel form-card hidden" style="text-align:center">
+   <div style="font-size:58px">🏆</div><h2>Quest Completed!</h2><p>Great job! Kamu sudah menyelesaikan semua tantangan.</p><div class="result-score" id="finalScore">0/100</div><p id="resultMessage"></p><button class="btn btn-primary" onclick="saveAndReturn()">Simpan Nilai & Selesai <i class="fa-solid fa-check"></i></button> <button class="btn btn-light" onclick="resetQuiz()">Main Lagi</button>
+  </div>
+ </section>
+
+ <section id="recapView" class="view hidden">
+  <div class="panel" style="padding:24px">
+   <div class="recap-head"><div><h2>📊 Rekap Nilai Siswa</h2><p class="side-copy" style="margin-top:6px">Riwayat tersimpan di browser/perangkat ini.</p></div><button class="btn btn-pink" onclick="openPinModal()"><i class="fa-solid fa-trash"></i> Hapus Rekap Nilai</button></div>
+   <div class="table-wrap"><table><thead><tr><th>No.</th><th>Nama Siswa</th><th>Kelas / Kelompok</th><th>Waktu Pengerjaan</th><th>Skor Akhir</th></tr></thead><tbody id="recapBody"></tbody></table></div>
+   <div id="emptyRecap" class="empty hidden"><div><i class="fa-solid fa-folder-open"></i></div><b>Belum ada data nilai.</b><p>Nilai akan tampil di sini setelah siswa menyelesaikan kuis.</p></div>
+   <p class="side-copy" style="margin-top:15px"><i class="fa-solid fa-circle-info"></i> Data LocalStorage hanya tersedia di browser dan perangkat ini.</p>
+  </div>
+ </section>
+</main>
+<footer>Made for curious minds · English Quest © <span id="year"></span> · Nada Nisrina</footer>
+
+<div id="feedbackModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle"><div class="modal"><span class="modal-emoji" id="feedbackEmoji">😊</span><h3 id="feedbackTitle">Selamat! Jawaban Kamu Benar!</h3><p id="feedbackText">Keren! Terus pertahankan semangat belajarmu.</p><button class="btn btn-primary" onclick="closeFeedbackAndContinue()">Lanjutkan Soal Berikutnya <i class="fa-solid fa-arrow-right"></i></button></div></div>
+<div id="pinModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="pinTitle"><div class="modal"><span class="modal-emoji">🔐</span><h3 id="pinTitle">Akses Pengelola</h3><p>Masukkan PIN untuk menghapus seluruh rekap nilai.</p><div class="field"><label for="pinInput">PIN Rahasia</label><input id="pinInput" type="password" inputmode="numeric" maxlength="12" placeholder="Masukkan PIN"></div><div id="pinError" class="form-error hidden">PIN Salah! Anda tidak memiliki akses untuk menghapus data.</div><div class="control-group" style="justify-content:center"><button class="btn btn-light" onclick="closePinModal()">Batal</button><button class="btn btn-primary" onclick="confirmDelete()">Verifikasi</button></div></div></div>
+<div id="toast" class="toast" role="status"></div>
+
+<script>
+const questionBank = [
+ {id:1,type:'mcq',level:'LOTS',topic:'Simple Present',q:'Choose the correct sentence.',options:['She go to school every day.','She goes to school every day.','She going to school every day.','She is go to school every day.'],answer:'She goes to school every day.',explain:'With he, she, and it, add -s or -es to the verb in the simple present.'},
+ {id:2,type:'mcq',level:'LOTS',topic:'Adverb of Frequency',q:'I ___ brush my teeth before bed. I do it every night.',options:['never','always','rarely','sometimes'],answer:'always',explain:'“Always” means something happens every time.'},
+ {id:3,type:'mcq',level:'MOTS',topic:'Simple Present',q:'Rafi usually ___ breakfast at 6 a.m.',options:['have','has','having','is have'],answer:'has',explain:'Use “has” with he, she, or it.'},
+ {id:4,type:'mcq',level:'MOTS',topic:'Adverb of Frequency',q:'Which sentence places the frequency adverb correctly?',options:['They play often football after school.','They often play football after school.','Often they plays football after school.','They play football often after school always.'],answer:'They often play football after school.',explain:'Frequency adverbs usually come before the main verb.'},
+ {id:5,type:'mcq',level:'LOTS',topic:'Telling the Time',q:'What time is 7:30?',options:['Half past seven','A quarter past seven',"A quarter to seven","Seven o'clock"],answer:'Half past seven',explain:'7:30 is half past seven.'},
+ {id:6,type:'mcq',level:'LOTS',topic:'Telling the Time',q:'The clock shows 4:15. How do you say it?',options:['A quarter to four','Half past four','A quarter past four','Four o’clock'],answer:'A quarter past four',explain:'15 minutes after four is a quarter past four.'},
+ {id:7,type:'mcq',level:'MOTS',topic:'Telling the Time',q:'It is 8:45. What is the correct expression?',options:['A quarter past eight','A quarter to nine','Half past nine','Nine o’clock'],answer:'A quarter to nine',explain:'8:45 is fifteen minutes before nine: a quarter to nine.'},
+ {id:8,type:'mcq',level:'HOTS',topic:'Simple Present',q:'Nina is never late. She arrives at school before the bell every day. Which sentence matches?',options:['Nina sometimes arrives late.','Nina always arrives late.','Nina never arrives late.','Nina rarely arrives early.'],answer:'Nina never arrives late.',explain:'“Never” means not at any time, matching the information.'},
+ {id:9,type:'mcq',level:'MOTS',topic:'Frequency Expressions',q:'Our English Club meets on Monday and Thursday. It meets ___.',options:['once a week','twice a week','three times a week','every day'],answer:'twice a week',explain:'Two times in one week means twice a week.'},
+ {id:10,type:'mcq',level:'HOTS',topic:'Frequency Expressions',q:'Dina swims on Monday, Wednesday, and Saturday. Which is correct?',options:['Dina swims once a week.','Dina swims twice a week.','Dina swims three times a week.','Dina swims every day.'],answer:'Dina swims three times a week.',explain:'Monday, Wednesday, and Saturday make three swimming sessions per week.'},
+ {id:11,type:'order',level:'LOTS',topic:'Simple Present',q:'Arrange the words to make a correct sentence.',words:['I','always','do','my','homework','after','school','.'],answer:'I always do my homework after school.',explain:'Put the subject first, the frequency adverb before the main verb, then the object and time phrase.'},
+ {id:12,type:'order',level:'MOTS',topic:'Simple Present',q:'Arrange the words to make a correct sentence.',words:['My','brother','usually','watches','TV','after','dinner','.'],answer:'My brother usually watches TV after dinner.',explain:'“Usually” comes before the main verb “watches”.'},
+ {id:13,type:'order',level:'LOTS',topic:'Telling the Time',q:'Arrange the words to say 6:30.',words:['It','is','half','past','six','.'],answer:'It is half past six.',explain:'The expression for 6:30 is “half past six”.'},
+ {id:14,type:'order',level:'MOTS',topic:'Telling the Time',q:'Arrange the words to say 9:45.',words:['It','is','a','quarter','to','ten','.'],answer:'It is a quarter to ten.',explain:'9:45 is a quarter to ten.'},
+ {id:15,type:'order',level:'LOTS',topic:'Telling the Time',q:'Arrange the words to say 2:00.',words:['It','is','two',"o'clock",'.'],answer:"It is two o'clock.",explain:'Use “o’clock” for an exact hour.'},
+ {id:16,type:'order',level:'MOTS',topic:'Frequency Expressions',q:'Arrange the words to make a correct sentence.',words:['We','have','English','club','twice','a','week','.'],answer:'We have English club twice a week.',explain:'Frequency expressions such as “twice a week” usually go at the end of the sentence.'},
+ {id:17,type:'order',level:'MOTS',topic:'Frequency Expressions',q:'Arrange the words to make a correct sentence.',words:['He','plays','badminton','three','times','a','week','.'],answer:'He plays badminton three times a week.',explain:'Use “plays” with he, and “three times a week” for three weekly occasions.'},
+ {id:18,type:'order',level:'HOTS',topic:'Adverb of Frequency',q:'Arrange the words to describe a routine that happens on most days.',words:['Salsa','usually','reads','a','book','before','bed','.'],answer:'Salsa usually reads a book before bed.',explain:'“Usually” describes a habit that happens on most occasions.'},
+ {id:19,type:'order',level:'HOTS',topic:'Simple Present',q:'Arrange the words to describe a habit that does not happen on any day.',words:['They','never','eat','candy','before','lunch','.'],answer:'They never eat candy before lunch.',explain:'“Never” goes before the main verb “eat”.'},
+ {id:20,type:'order',level:'HOTS',topic:'Frequency Expressions',q:'Arrange the words to explain a daily routine.',words:['My','family','walks','together','once','a','day','.'],answer:'My family walks together once a day.',explain:'“Once a day” means one time each day.'}
+];
+
+const STORAGE_KEY='englishQuestScores_v1';
+let questions=[],current=0,student={name:'',className:''},userAnswers={},evaluated={},score=0,quizFinished=false,hasSaved=false,selectedWords=[];
+
+const $=id=>document.getElementById(id);
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function showView(view){
+ $('gameView').classList.toggle('hidden',view!=='game');
+ $('recapView').classList.toggle('hidden',view!=='recap');
+ $('navGame').classList.toggle('active',view==='game');
+ $('navRecap').classList.toggle('active',view==='recap');
+ if(view==='recap')renderRecap();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+$('identityForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ student.name=$('studentName').value.trim();
+ student.className=$('studentClass').value.trim();
+ if(!student.name||!student.className)return;
+ startQuiz();
+});
+
+function startQuiz(){
+ questions=shuffle(questionBank).map(q=>q.type==='mcq'?{...q,options:shuffle(q.options)}:{...q,words:shuffle(q.words)});
+ current=0; userAnswers={}; evaluated={}; score=0; selectedWords=[]; quizFinished=false; hasSaved=false;
+ $('identityScreen').classList.add('hidden');
+ $('finishScreen').classList.add('hidden');
+ $('quizScreen').classList.remove('hidden');
+ renderQuestion();
+ updateStats();
+}
+
+function resetQuiz(){
+ if(!student.name){$('identityScreen').classList.remove('hidden');return;}
+ if(!confirm('Mulai ulang kuis? Urutan soal akan diacak kembali.'))return;
+ startQuiz();
+ showView('game');
+}
+
+function renderQuestion(){
+ const q=questions[current];
+ selectedWords=[];
+ const totalAnswered=Object.keys(evaluated).length;
+ 
+ $('progressBar').style.width=(totalAnswered/20*100)+'%';
+ $('answeredLabel').textContent=totalAnswered+' / 20 dijawab';
+
+ let html=`<div class="question-top"><span class="q-number">SOAL ${current+1} / 20</span><span class="q-type">${q.type==='mcq'?'PILIHAN GANDA':'SUSUN KALIMAT'} · ${q.level}</span></div><h2 class="question">${q.q}</h2>`;
+
+ const isEvaluated = evaluated[q.id] !== undefined;
+
+ if(q.type==='mcq'){
+  html+=`<div class="options">${q.options.map((opt,i)=>{
+   let statusClass = '';
+   if(isEvaluated){
+    if(opt === q.answer) statusClass = 'correct';
+    else if(userAnswers[q.id] === opt) statusClass = 'incorrect';
+   } else if(userAnswers[q.id] === opt){
+    statusClass = 'selected';
+   }
+   return `<button class="option ${statusClass}" ${isEvaluated?'disabled':''} onclick="selectOption(${q.id},${i})" data-opt="${escapeAttr(opt)}"><span class="letter">${String.fromCharCode(65+i)}</span><span>${escapeHtml(opt)}</span></button>`;
+  }).join('')}</div>`;
+ }else{
+  html+=`<div class="hint"><i class="fa-solid fa-puzzle-piece"></i> Klik kata-kata di bawah sesuai urutan kalimat yang benar. Klik kata di area jawaban untuk mengembalikannya.</div>
+  <div class="small-label" style="margin:17px 0 8px">KALIMATMU</div>
+  <div id="buildArea" class="build-area"><span class="build-placeholder">Susun kata di sini...</span></div>
+  <div class="small-label">PILIHAN KATA</div>
+  <div class="word-bank" id="wordBank"></div>
+  ${!isEvaluated ? '<button class="btn btn-light" onclick="clearWords()"><i class="fa-solid fa-rotate-left"></i> Kosongkan susunan</button>' : ''}`;
+ }
+
+ $('questionContainer').innerHTML=html;
+
+ if(q.type==='order'){
+  if(Array.isArray(userAnswers[q.id])){
+   const used=[];
+   selectedWords=userAnswers[q.id].map(word=>{
+    const index=q.words.findIndex((w,i)=>w===word&&!used.includes(i));
+    if(index>=0)used.push(index);
+    return {index,word};
+   }).filter(x=>x.index>=0);
+  }
+  renderWordAreas();
+ }
+
+ $('prevBtn').disabled = current===0;
+ $('nextBtn').innerHTML = current===19 ? 'Selesai <i class="fa-solid fa-flag-checkered"></i>' : 'Lanjut <i class="fa-solid fa-arrow-right"></i>';
+
+ const checkBtn = $('checkBtn');
+ if(isEvaluated){
+  checkBtn.disabled = true;
+  checkBtn.innerHTML = evaluated[q.id] ? '<i class="fa-solid fa-circle-check"></i> Jawaban Benar' : '<i class="fa-solid fa-circle-xmark"></i> Jawaban Salah';
+ } else {
+  checkBtn.disabled = false;
+  checkBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Jawab & Periksa';
+ }
+
+ updateStats();
+}
+
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function escapeAttr(s){return escapeHtml(s);}
+
+function selectOption(id,index){
+ if(evaluated[id]!==undefined)return;
+ const q=questions[current];
+ userAnswers[id]=q.options[index];
+ document.querySelectorAll('.option').forEach((el,i)=>el.classList.toggle('selected',i===index));
+}
+
+function addWord(index){
+ const q=questions[current];
+ if(evaluated[q.id]!==undefined)return;
+ const available=q.words.map((w,i)=>i).filter(i=>!selectedWords.some(x=>x.index===i));
+ if(!available.includes(index))return;
+ selectedWords.push({index,word:q.words[index]});
+ userAnswers[q.id]=selectedWords.map(x=>x.word);
+ renderWordAreas();
+}
+
+function removeWord(index){
+ if(evaluated[questions[current].id]!==undefined)return;
+ selectedWords.splice(index,1);
+ userAnswers[questions[current].id]=selectedWords.map(x=>x.word);
+ renderWordAreas();
+}
+
+function clearWords(){
+ if(evaluated[questions[current].id]!==undefined)return;
+ selectedWords=[];
+ userAnswers[questions[current].id]=[];
+ renderWordAreas();
+}
+
+function renderWordAreas(){
+ const q=questions[current], area=$('buildArea'), bank=$('wordBank');
+ if(!area||!bank)return;
+ const isEvaluated = evaluated[q.id] !== undefined;
+ area.innerHTML=selectedWords.length?selectedWords.map((x,i)=>`<button class="word-tile" ${isEvaluated?'disabled':''} onclick="removeWord(${i})" title="Klik untuk mengembalikan kata">${escapeHtml(x.word)} ${!isEvaluated?'<i class="fa-solid fa-xmark" style="font-size:10px"></i>':''}</button>`).join(''):'<span class="build-placeholder">Susun kata di sini...</span>';
+ bank.innerHTML=q.words.map((w,i)=>{
+  const used=selectedWords.some(x=>x.index===i);
+  return `<button class="word-tile ${used?'used':''}" ${used||isEvaluated?'disabled':''} data-index="${i}" onclick="addWord(${i})">${escapeHtml(w)}</button>`;
+ }).join('');
+}
+
+function checkAnswer(){
+ const q=questions[current];
+ if(evaluated[q.id]!==undefined){
+  showToast('Soal ini sudah pernah dijawab.');
+  return;
+ }
+
+ let isCorrect=false;
+ if(q.type==='mcq'){
+  if(!userAnswers[q.id]){
+   showToast('Pilih salah satu jawaban terlebih dahulu.');
+   return;
+  }
+  isCorrect = userAnswers[q.id] === q.answer;
+ } else {
+  const built=(selectedWords.length?selectedWords.map(x=>x.word):[]).join(' ').replace(/\s+([.,!?])/g,'$1').trim();
+  if(!built){
+   showToast('Susun kata terlebih dahulu.');
+   return;
+  }
+  isCorrect = normalize(built) === normalize(q.answer);
+ }
+
+ evaluated[q.id] = isCorrect;
+ if(isCorrect){
+  score += 5;
+ }
+
+ showFeedback(isCorrect, q.explain);
+ renderQuestion();
+}
+
+function normalize(s){return s.toLowerCase().replace(/[.!?]+$/,'').replace(/\s+/g,' ').trim();}
+
+function showFeedback(ok,explain){
+ $('feedbackEmoji').textContent = ok ? '😊' : '💡';
+ $('feedbackTitle').textContent = ok ? 'Selamat! Jawaban Kamu Benar!' : 'Jawaban Kurang Tepat!';
+ $('feedbackText').textContent = ok ? 'Hebat! '+explain : 'Kunci Jawaban: "'+questions[current].answer+'"\n\nPenjelasan: '+explain;
+ $('feedbackModal').classList.remove('hidden');
+}
+
+function closeFeedbackAndContinue(){
+ $('feedbackModal').classList.add('hidden');
+ if(current < 19){
+  current++;
+  renderQuestion();
+ } else if(Object.keys(evaluated).length === 20){
+  finishQuiz();
+ }
+}
+
+function moveQuestion(dir){
+ if(dir < 0){
+  current = Math.max(0, current - 1);
+  renderQuestion();
+  return;
+ }
+ if(current < 19){
+  current++;
+  renderQuestion();
+  return;
+ }
+ if(Object.keys(evaluated).length === 20){
+  finishQuiz();
+  return;
+ }
+ showToast('Jawab soal aktif terlebih dahulu sebelum menyelesaikan kuis.');
+}
+
+function updateStats(){
+ const totalAnswered = Object.keys(evaluated).length;
+ $('scoreStat').textContent = score;
+ $('doneStat').textContent = totalAnswered + '/20';
+ $('answeredLabel').textContent = totalAnswered + ' / 20 dijawab';
+ $('progressBar').style.width = (totalAnswered / 20 * 100) + '%';
+}
+
+function finishQuiz(){
+ quizFinished = true;
+ $('quizScreen').classList.add('hidden');
+ $('finishScreen').classList.remove('hidden');
+ $('finalScore').textContent = score + '/100';
+ $('resultMessage').textContent = `${student.name} · ${student.className} — ${score >= 80 ? 'Luar biasa! Prestasi yang sangat baik.' : 'Kerja bagus! Teruslah berlatih!'}`;
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function getRecords(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch(e){return [];}}
+
+function saveAndReturn(){
+ if(!quizFinished)return;
+ if(!hasSaved){
+  const records=getRecords();
+  records.unshift({name:student.name,className:student.className,completedAt:new Date().toISOString(),score:score});
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(records));
+  hasSaved=true;
+ }
+ renderRecap();
+ showToast('Nilai berhasil disimpan di perangkat ini.');
+ showView('recap');
+}
+
+function renderRecap(){
+ const records=getRecords(), body=$('recapBody');
+ body.innerHTML='';
+ $('emptyRecap').classList.toggle('hidden',records.length>0);
+ document.querySelector('.table-wrap').classList.toggle('hidden',records.length===0);
+ records.forEach((r,i)=>{
+  const date=new Date(r.completedAt);
+  const tr=document.createElement('tr');
+  [String(i+1),r.name,r.className,date.toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})].forEach(v=>{
+   const td=document.createElement('td');
+   td.textContent=v;
+   tr.appendChild(td);
+  });
+  const td=document.createElement('td');
+  td.innerHTML=`<span class="score-pill">${Number(r.score)||0}/100</span>`;
+  tr.appendChild(td);
+  body.appendChild(tr);
+ });
+}
+
+function openPinModal(){$('pinInput').value='';$('pinError').classList.add('hidden');$('pinModal').classList.remove('hidden');setTimeout(()=>$('pinInput').focus(),50);}
+function closePinModal(){$('pinModal').classList.add('hidden');}
+function confirmDelete(){
+ if($('pinInput').value==='1234'){
+  localStorage.removeItem(STORAGE_KEY);
+  closePinModal();
+  renderRecap();
+  showToast('Seluruh rekap nilai berhasil dihapus.');
+ }else{
+  $('pinError').classList.remove('hidden');
+  $('pinInput').select();
+ }
+}
+
+let toastTimer;
+function showToast(msg){
+ const t=$('toast');
+ t.textContent=msg;
+ t.classList.add('show');
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+$('pinInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmDelete();});
+$('feedbackModal').addEventListener('click',e=>{if(e.target===$('feedbackModal'))closeFeedbackAndContinue();});
+$('year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
